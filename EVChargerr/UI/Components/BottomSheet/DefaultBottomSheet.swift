@@ -13,69 +13,67 @@ struct DefaultBottomSheet<Content: View>: View {
     @State private var offsetY: CGFloat = 0
     @State private var drawerHeight: CGFloat = 120
     @State private var startingOffset: CGFloat = UIScreen.main.bounds.height * 0.8
-    @State private var currentOffset:CGFloat = 0
-    @State private var endOffset:CGFloat = 0
+    @State private var currentOffset: CGFloat = 0
+    @State private var endOffset: CGFloat = 0
     
     @State var drawerState: DrawerState = .collapsed
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            // uchwyt
             HStack {
                 Spacer()
-                
                 Capsule()
                     .frame(width: 40, height: 5)
                     .foregroundColor(.gray)
                     .padding(.top, 8)
                     .onTapGesture {
-                        withAnimation {
+                        withAnimation(.spring()) {
                             drawerState = drawerState == .collapsed ? .expanded : .collapsed
                             drawerHeight = drawerState.drawerHeight
-                            //drawerState = drawerState == .collapsed ? .expanded : .collapsed
                         }
                     }
-                
                 Spacer()
             }
             
+            // tutaj jest najważniejsze — kontener na content
             content
+                .frame(maxHeight: .infinity)
+                .clipped()
         }
-        .clipped()
         .frame(maxWidth: .infinity)
-        .background(.white)
+        .background(Color.white)
         .cornerRadius(20)
-        .offset(y:startingOffset)
-        .offset(y:currentOffset)
-        .offset(y:endOffset)
+        .shadow(radius: 10)
+        .offset(y: startingOffset + currentOffset + endOffset)
         .gesture(
             DragGesture()
-                .onChanged{ value in
-                    withAnimation(.spring()){
+                .onChanged { value in
+                    withAnimation(.spring()) {
                         if currentOffset <= 0, drawerState == .collapsed {
                             currentOffset = max(value.translation.height, -DrawerState.expanded.drawerHeight)
                         } else if currentOffset >= 0, drawerState == .expanded {
                             currentOffset = min(value.translation.height, DrawerState.expanded.drawerHeight)
                         }
-                        
                     }
                 }
-                .onEnded{ value in
-                    withAnimation(.spring()){
+                .onEnded { _ in
+                    withAnimation(.spring()) {
                         if currentOffset < -150 {
                             drawerState = .expanded
                             endOffset = -DrawerState.expanded.drawerHeight
-                        }else if endOffset != 0 && currentOffset > 150 {
+                        } else if endOffset != 0 && currentOffset > 150 {
                             drawerState = .collapsed
-                            endOffset = .zero
+                            endOffset = 0
                         }
                         currentOffset = 0
                     }
                 }
         )
-        .transition(.move(edge: .bottom))
         .edgesIgnoringSafeArea(.bottom)
     }
 }
+
 
 struct BottomSheetModifier<SubView: View>: ViewModifier {
     @Binding var isShown: Bool
@@ -92,9 +90,9 @@ struct BottomSheetModifier<SubView: View>: ViewModifier {
                 }
             
             if isShown {
-                withAnimation {
-                    DefaultBottomSheet(content: subView)
-                }
+                DefaultBottomSheet(content: subView)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.spring(), value: isShown)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -104,13 +102,12 @@ struct BottomSheetModifier<SubView: View>: ViewModifier {
 
 extension View {
     func selectedCharger(isShown: Binding<Bool>, charger: EVCharger?) -> some View {
-        Group {
-            if let charger = charger {
-                self.modifier(BottomSheetModifier(isShown: isShown, subView: SelectedCharger(charger: charger)))
-            } else {
-                self
-            }
-        }
+        self.modifier(
+            BottomSheetModifier(
+                isShown: isShown,
+                subView: charger.map { SelectedCharger(charger: $0) }
+            )
+        )
     }
 }
 

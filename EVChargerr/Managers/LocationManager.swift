@@ -42,7 +42,7 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last, userLocation == nil else { return }
+        guard let location = locations.last/*, userLocation == nil*/ else { return }
         userLocation = location.coordinate
     }
 }

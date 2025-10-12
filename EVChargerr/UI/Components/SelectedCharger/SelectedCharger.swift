@@ -11,72 +11,85 @@ struct SelectedCharger: View {
     var charger: EVCharger
     var viewModel: SelectedChargerModel = .init()
     
-    @State private var contentHeight: CGFloat = .zero
-    
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Group {
+        VStack(alignment: .leading, spacing: 16) {
+            
+            VStack(alignment: .leading, spacing: 4) {
                 Text(charger.name)
-                    .font(.headline)
+                    .font(.title3.bold())
                 Text("\(charger.address), \(charger.city)")
                     .font(.subheadline)
+                    .foregroundColor(.gray)
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.top)
             
             Divider()
             
-            Text("Złącza:")
+            Text("Złącza")
                 .font(.headline)
                 .padding(.horizontal)
             
-            // ScrollView z dynamiczną wysokością
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 10) {
-                    ForEach(charger.connections, id: \.typeName) { connection in
-                        ConnectionView(connection: connection)
+                VStack(alignment: .leading, spacing: 8) {
+                    
+                    if charger.connections.isEmpty {
+                        Text("Brak złączy")
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding()
+                    } else {
+                        ForEach(charger.connections, id: \.typeName) { connection in
+                            ConnectionView(connection: connection)
+                        }
                     }
                     
-                    VStack {
-                        Button(action: { viewModel.openInMaps(charger: charger) }) {
-                            HStack {
-                                Image(systemName: "car.fill")
-                                Text("Nawiguj").bold()
-                            }
+                    Button(action: { viewModel.openInMaps(charger: charger) }) {
+                        HStack {
+                            Image(systemName: "map.fill")
+                                .font(.title2)
+                            Text("Nawiguj w Mapach")
+                                .font(.headline)
+                                .fontWeight(.semibold)
                         }
-                        .buttonStyle(.primary)
-                        
-                        Button(action: { viewModel.openInGoogleMaps(charger: charger) }) {
-                            HStack {
-                                Image(systemName: "map.fill")
-                                Text("Nawiguj (Google Maps)").bold()
-                            }
-                        }
-                        .buttonStyle(.primary)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(10)
                     }
-                    .padding(.horizontal, 16)
+                    .buttonStyle(.plain)
+                    
+                    Button(action: { viewModel.openInGoogleMaps(charger: charger) }) {
+                        HStack {
+                            Image("google_maps_icon")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 24)
+                            Text("Nawiguj w Google Maps")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green.opacity(0.1))
+                        .cornerRadius(10)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom, 16)
+                    
                 }
-                // Pomiar wysokości zawartości
-                .background(
-                    GeometryReader { geo in
-                        Color.clear
-                            .preference(key: HeightPreferenceKey.self, value: geo.size.height)
-                    }
-                )
+                .padding(.vertical, 8)
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity)
+                .background(Color.white)
             }
-            .frame(maxHeight: contentHeight) // ScrollView ograniczona do zawartości
-            .onPreferenceChange(HeightPreferenceKey.self) { newHeight in
-                self.contentHeight = newHeight
-            }
+            .clipped()
+            .frame(height: DrawerState.expanded.drawerHeight)
+            .background(Color.white)
+            
+            Spacer()
         }
-        .background(Color.white)
         .foregroundColor(.black)
-    }
-}
-
-// PreferenceKey do pomiaru wysokości
-struct HeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = max(value, nextValue())
+        .background(Color.white)
     }
 }

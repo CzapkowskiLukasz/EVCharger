@@ -40,15 +40,10 @@ struct ConnectionView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.purple, Color.blue, Color.green]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
+                    evGradient,
                     lineWidth: 1.5
                 )
                 .opacity(0.9)
         )
-        .padding(.horizontal, 16)
     }
 }

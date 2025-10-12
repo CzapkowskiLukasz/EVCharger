@@ -20,47 +20,38 @@ struct MainView: View {
                 Text("Brak dostępu do lokalizacji. Włącz w ustawieniach.")
                     .foregroundColor(.red)
             case .authorizedWhenInUse, .authorizedAlways:
-                if let userLoc = viewModel.locationManager.userLocation {
-                    Map(position: $viewModel.region) {
+                if let _ = viewModel.locationManager.userLocation {
+                    Map(position: $viewModel.region, interactionModes: [.all]) {
                         
                         ForEach(viewModel.chargers) { charger in
                             Annotation(charger.name, coordinate: charger.coordinate) {
-                                Image(systemName: "bolt.circle.fill")
-                                                .font(.title)
-                                                .foregroundColor(.green)
-                                                .onTapGesture {
-                                                    viewModel.selectCharger(charger: charger)
-                                                }
+                                ChargerAnnotationView(
+                                    charger: charger,
+                                    isSelected: viewModel.selectedEvCharger?.id == charger.id,
+                                    action: { charger in
+                                        viewModel.selectCharger(charger: charger)
+                                    })
                             }
                         }
                         
                         UserAnnotation()
                     }
-//                    {
-//                        // Map pins
-//                        ForEach(viewModel.charges) { charger in
-//                            MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: charger.latitude, longitude: charger.longitude)) {
-//                                VStack {
-//                                    Image(systemName: "bolt.circle.fill")
-//                                        .font(.title)
-//                                        .foregroundColor(.green)
-//                                    Text(charger.station_name)
-//                                        .font(.caption)
-//                                        .background(Color.white.opacity(0.7))
-//                                        .cornerRadius(6)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    .onAppear {
-//                        //region.center = userLoc
-//                        viewModel.loadChargers()
-//                    }
-                    //                        .onChange(of: locationManager.userLocation.map { ($0.latitude, $0.longitude) }) { newValue in
-                    //                            if let newValue = newValue {
-                    //                                region.center = CLLocationCoordinate2D(latitude: newValue.0, longitude: newValue.1)
-                    //                            }
-                    //                        }
+                    .overlay(alignment: .bottomTrailing) {
+                        Button(action: {
+                            withAnimation(.easeInOut) {
+                                viewModel.centerMapOnUserLocation()
+                            }
+                        }) {
+                            Image(systemName: "scope") // nowa ikonka
+                                .font(.title2)
+                                .foregroundStyle(
+                                    evGradient
+                                )
+                        }
+                        .buttonStyle(.capsule)
+                        .padding()
+                        
+                    }
                     .edgesIgnoringSafeArea(.all)
                 } else {
                     ProgressView("Ładowanie lokalizacji...")
@@ -72,7 +63,7 @@ struct MainView: View {
         }
         .selectedCharger(isShown: $viewModel.isSheetShown, charger: viewModel.selectedEvCharger)
     }
-
+    
 }
 
 #Preview {

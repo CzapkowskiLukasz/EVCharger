@@ -14,53 +14,121 @@ import SwiftUI
 
 final class MainViewModel: ObservableObject {
     @Published var chargers: [EVCharger] = []
-    @Published var userLocation: CLLocationCoordinate2D?
-    @Published var region: MapCameraPosition = .region( MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 37.4277, longitude: -122.1701),
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-    ) )
+    @Published var region: MapCameraPosition = .userLocation(
+        followsHeading: true,
+        fallback: .region(
+            MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: 37.4277, longitude: -122.1701),
+                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            )
+        )
+    )
     
     @Published var selectedEvCharger: EVCharger?
     @Published var isSheetShown: Bool = false
     
+    var manageMapChange: Bool = false
+    var manageCameraFollow: Bool = true
+    
+    private var lastCenterCoordinate: CLLocationCoordinate2D?
+    private var lastLoadLocation: CLLocationCoordinate2D?
+    private let loadDistanceThreshold: Double = 500
     private let service = EVChargerService()
     let locationManager = LocationManager()
     
+    private var cancellables = Set<AnyCancellable>()
+    
     init() {
-        userLocation = locationManager.userLocation
-        
-        if let userLocation = userLocation {
-            region = .region(MKCoordinateRegion(center: userLocation , span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)))
-        }
-        
-        // Obserwacja zmian lokalizacji
+        setupBindings()
+    }
+    
+    private func setupBindings() {
         locationManager.$userLocation
             .debounce(for: .milliseconds(1000), scheduler: DispatchQueue.main)
             .sink { [weak self] newLoc in
+                guard let self = self, let userLocation = newLoc else { return }
+                
+                if let last = self.lastLoadLocation {
+                    let distance = CLLocation(latitude: last.latitude, longitude: last.longitude)
+                        .distance(from: CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude))
+                    
+                    if distance >= 10 {
+                        if self.manageCameraFollow {
+                            withAnimation {
+                                self.region = .userLocation(
+                                    followsHeading: false,
+                                    fallback: .region(
+                                        MKCoordinateRegion(
+                                            center: userLocation,
+                                            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                    }
+                    
+                    if distance >= self.loadDistanceThreshold {
+                        self.loadChargers(userLocation: userLocation)
+                        self.lastLoadLocation = userLocation
+                    }
+                } else {
+                    self.region = .userLocation(
+                        followsHeading: false,
+                        fallback: .region(
+                            MKCoordinateRegion(
+                                center: userLocation,
+                                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                            )
+                        )
+                    )
+                    self.manageMapChange = true
+                    self.manageCameraFollow = true
+                    self.loadChargers(userLocation: userLocation)
+                    self.lastCenterCoordinate = userLocation
+                    self.lastLoadLocation = userLocation
+                }
+            }
+            .store(in: &cancellables)
+        
+        $region
+            .removeDuplicates()
+            .dropFirst()
+            .sink { [weak self] newRegion in
                 guard let self = self else { return }
                 
-                self.userLocation = newLoc
-                
-                if let userLocation = userLocation {
-                    region = .region(MKCoordinateRegion(center: userLocation , span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)))
+                if self.manageMapChange {
+                    self.manageCameraFollow = false
                 }
-                
-                self.loadChargers(userLocation: newLoc)
                 
             }
             .store(in: &cancellables)
+        
+        $isSheetShown
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                guard let self else { return }
+                
+                if !value {
+                    self.selectedEvCharger = nil
+                }
+            }
+            .store(in: &cancellables)
     }
-    
-    private var cancellables = Set<AnyCancellable>()
     
     func loadChargers(userLocation: CLLocationCoordinate2D?) {
         guard let userLocation = userLocation else { return }
         
         Task {
             do {
-                chargers = try await service.fetchChargers(lat: userLocation.latitude, lon: userLocation.longitude, distance: 20)
+                chargers = try await service.fetchChargers(
+                    lat: userLocation.latitude,
+                    lon: userLocation.longitude,
+                    distance: 20
+                )
             } catch {
-                //self.error = error.localizedDescription
+                // self.error = error.localizedDescription
             }
         }
     }
@@ -68,8 +136,28 @@ final class MainViewModel: ObservableObject {
     func selectCharger(charger: EVCharger) {
         withAnimation {
             selectedEvCharger = charger
-            region = .region(MKCoordinateRegion(center: charger.coordinate , span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)))
-            isSheetShown = true
+            region = .region(
+                MKCoordinateRegion(
+                    center: charger.coordinate,
+                    span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                )
+            )
+        }
+        isSheetShown = true
+    }
+    
+    func centerMapOnUserLocation() {
+        if let userLocation = locationManager.userLocation {
+            manageCameraFollow = true
+            self.region = .userLocation(
+                followsHeading: false,
+                fallback: .region(
+                    MKCoordinateRegion(
+                        center: userLocation,
+                        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                    )
+                )
+            )
         }
     }
 }

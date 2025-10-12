@@ -27,6 +27,7 @@
 		B2B147DA2E9996FD00C97BA3 /* EVChargerr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EVChargerr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B147E72E9996FF00C97BA3 /* EVChargerrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVChargerrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B147F12E9996FF00C97BA3 /* EVChargerrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVChargerrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2B148732E9AA32200C97BA3 /* EVChargerr.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = EVChargerr.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -89,6 +90,11 @@
 				B2B147E72E9996FF00C97BA3 /* EVChargerrTests.xctest */,
 				B2B147F12E9996FF00C97BA3 /* EVChargerrUITests.xctest */,
 			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B2B148752E9AA32200C97BA3 /* Products */ = {
+			isa = PBXGroup;
 			name = Products;
 			sourceTree = "<group>";
 		};
@@ -201,6 +207,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B2B147DB2E9996FD00C97BA3 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B2B148752E9AA32200C97BA3 /* Products */;
+					ProjectRef = B2B148732E9AA32200C97BA3 /* EVChargerr.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				B2B147D92E9996FD00C97BA3 /* EVChargerr */,
@@ -403,7 +415,7 @@
 				DEVELOPMENT_TEAM = 5KUD98AZAA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Twoja stara";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikacja potrzebuje dostępu do lokalizacji, aby wyznaczać trasy i pokazywać stacje w pobliżu.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +444,7 @@
 				DEVELOPMENT_TEAM = 5KUD98AZAA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikacja potrzebuje dostępu do lokalizacji, aby wyznaczać trasy i pokazywać stacje w pobliżu.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
