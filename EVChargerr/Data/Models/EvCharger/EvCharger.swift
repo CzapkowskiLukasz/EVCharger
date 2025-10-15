@@ -9,12 +9,12 @@ import Foundation
 import CoreLocation
 
 struct EVCharger: Codable, Identifiable {
-    let id = UUID() // lokalny identyfikator dla SwiftUI
+    let id = UUID()
     let isActive: Bool
     let name: String
     let address: String
     let city: String
-    let region: String
+    let region: String?
     let country: String
     let latitude: Double
     let longitude: Double
@@ -39,9 +39,9 @@ struct EVCharger: Codable, Identifiable {
 
 struct EVConnection: Codable {
     let typeName: String
-    let typeOfficial: String
+    let typeOfficial: String?
     let level: Int
-    let numConnectors: Int
+    let numConnectors: Int?
     
     enum CodingKeys: String, CodingKey {
         case typeName = "type_name"

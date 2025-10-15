@@ -36,13 +36,12 @@ struct DefaultBottomSheet<Content: View>: View {
                 Spacer()
             }
             
-            // tutaj jest najważniejsze — kontener na content
             content
                 .frame(maxHeight: .infinity)
                 .clipped()
         }
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color(.systemBackground))
         .cornerRadius(20)
         .shadow(radius: 10)
         .offset(y: startingOffset + currentOffset + endOffset)
@@ -109,9 +108,17 @@ extension View {
             )
         )
     }
+    
+    func searchSheet(isShown: Binding<Bool>, action: @escaping (City) -> Void) -> some View {
+        self.modifier(
+            BottomSheetModifier(
+                isShown: isShown,
+                subView: SearchView(viewModel: .init(), action: action)
+            )
+        )
+    }
 }
 
-// Stan szuflady
 enum DrawerState {
     case collapsed
     case expanded

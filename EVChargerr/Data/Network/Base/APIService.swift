@@ -9,7 +9,8 @@ import Foundation
 
 protocol APIService {
     var apiKey: String { get }
-
+    var base: String { get }
+    
     func fetch<T: Decodable>(
         endpoint: String,
         queryItems: [URLQueryItem]
@@ -17,6 +18,10 @@ protocol APIService {
 }
 
 extension APIService {
+    
+    var base: String {  "https://api.api-ninjas.com/v1/" }
+    var apiKey: String { "" }
+    
     func fetch<T: Decodable>(
         endpoint: String,
         queryItems: [URLQueryItem] = []

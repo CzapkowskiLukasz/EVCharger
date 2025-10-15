@@ -37,19 +37,27 @@ struct MainView: View {
                         UserAnnotation()
                     }
                     .overlay(alignment: .bottomTrailing) {
-                        Button(action: {
-                            withAnimation(.easeInOut) {
-                                viewModel.centerMapOnUserLocation()
+                        VStack {
+                            Button(action: {
+                                withAnimation(.easeInOut) {
+                                    viewModel.centerMapOnUserLocation()
+                                }
+                            }) {
+                                Image(systemName: "scope")
                             }
-                        }) {
-                            Image(systemName: "scope") // nowa ikonka
-                                .font(.title2)
-                                .foregroundStyle(
-                                    evGradient
-                                )
+                            .buttonStyle(.outlineRound)
+                            .padding()
+                            
+                            Button(action: {
+                                withAnimation(.easeInOut) {
+                                    viewModel.shearchActive = true
+                                }
+                            }) {
+                                Image(systemName: "magnifyingglass")
+                            }
+                            .buttonStyle(.outlineRound)
+                            .padding()
                         }
-                        .buttonStyle(.capsule)
-                        .padding()
                         
                     }
                     .edgesIgnoringSafeArea(.all)
@@ -61,7 +69,16 @@ struct MainView: View {
             }
             
         }
-        .selectedCharger(isShown: $viewModel.isSheetShown, charger: viewModel.selectedEvCharger)
+        .selectedCharger(
+            isShown: $viewModel.isSheetShown,
+            charger: viewModel.selectedEvCharger
+        )
+        .searchSheet(
+            isShown: $viewModel.shearchActive
+        ) {
+            city in
+            viewModel.selectCity(city: city)
+        }
     }
     
 }

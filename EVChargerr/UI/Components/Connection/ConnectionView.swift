@@ -15,7 +15,18 @@ struct ConnectionView: View {
             Text("⚡") // ikona mocy
                 .font(.largeTitle)
                 .padding(10)
-                .background(Color.green.opacity(0.2))
+                .background(
+                    Color(UIColor { trait in
+                        switch trait.userInterfaceStyle {
+                        case .dark:
+                            // mocniejsze tło w Dark Mode
+                            return UIColor.systemGreen.withAlphaComponent(0.6)
+                        default:
+                            // delikatniejsze tło w Light Mode
+                            return UIColor.systemGreen.withAlphaComponent(0.2)
+                        }
+                    })
+                )
                 .clipShape(Circle())
             
             VStack(alignment: .leading, spacing: 4) {
@@ -23,18 +34,15 @@ struct ConnectionView: View {
                     .font(.headline)
                 Text("🏷️ Oficjalny: \(connection.typeOfficial)")
                     .font(.caption)
-                    .foregroundColor(.black)
                 Text("⚡ Poziom: \(connection.level)")
                     .font(.caption2)
-                    .foregroundColor(.black)
                 Text("🔢 Liczba konektorów: \(connection.numConnectors)")
                     .font(.caption)
-                    .foregroundColor(.black)
             }
             
             Spacer()
         }
-        .background(Color.white.opacity(0.95))
+        .background(Color(.systemBackground).opacity(0.95))
         .cornerRadius(12)
         .padding()
         .overlay(

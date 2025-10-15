@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B2B149892EA011DB00C97BA3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B2B149882EA011DB00C97BA3 /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B2B147E82E9996FF00C97BA3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -53,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2B149892EA011DB00C97BA3 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +123,7 @@
 			);
 			name = EVChargerr;
 			packageProductDependencies = (
+				B2B149882EA011DB00C97BA3 /* Kingfisher */,
 			);
 			productName = EVChargerr;
 			productReference = B2B147DA2E9996FD00C97BA3 /* EVChargerr.app */;
@@ -204,6 +210,9 @@
 			);
 			mainGroup = B2B147D12E9996FD00C97BA3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B2B149872EA0119D00C97BA3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B2B147DB2E9996FD00C97BA3 /* Products */;
 			projectDirPath = "";
@@ -575,6 +584,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B2B149872EA0119D00C97BA3 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B2B149882EA011DB00C97BA3 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B2B149872EA0119D00C97BA3 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B2B147D22E9996FD00C97BA3 /* Project object */;
 }

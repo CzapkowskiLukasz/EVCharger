@@ -30,7 +30,7 @@ class EVChargerService: APIService {
                     queryItems.append(URLQueryItem(name: "distance", value: "\(distance)"))
                 }
         
-        return try await fetch(endpoint: "https://api.api-ninjas.com/v1/evcharger", queryItems: queryItems)
+        return try await fetch(endpoint: base + "evcharger", queryItems: queryItems)
         
     }
 }

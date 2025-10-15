@@ -19,7 +19,6 @@ struct SelectedCharger: View {
                     .font(.title3.bold())
                 Text("\(charger.address), \(charger.city)")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
             }
             .padding(.horizontal)
             .padding(.top)
@@ -35,7 +34,6 @@ struct SelectedCharger: View {
                     
                     if charger.connections.isEmpty {
                         Text("Brak złączy")
-                            .foregroundColor(.gray)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding()
                     } else {
@@ -54,7 +52,13 @@ struct SelectedCharger: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.blue.opacity(0.1))
+                        .background(
+                            Color(UIColor { trait in
+                                trait.userInterfaceStyle == .dark ?
+                                UIColor.systemBlue.withAlphaComponent(0.3) :
+                                UIColor.systemBlue.withAlphaComponent(0.1)
+                            })
+                        )
                         .cornerRadius(10)
                     }
                     .buttonStyle(.plain)
@@ -71,7 +75,13 @@ struct SelectedCharger: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.green.opacity(0.1))
+                        .background(
+                                Color(UIColor { trait in
+                                    trait.userInterfaceStyle == .dark ?
+                                    UIColor.systemGreen.withAlphaComponent(0.3) :
+                                    UIColor.systemGreen.withAlphaComponent(0.1)
+                                })
+                            )
                         .cornerRadius(10)
                     }
                     .buttonStyle(.plain)
@@ -81,15 +91,14 @@ struct SelectedCharger: View {
                 .padding(.vertical, 8)
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity)
-                .background(Color.white)
+                .background(Color(.systemBackground))
             }
             .clipped()
             .frame(height: DrawerState.expanded.drawerHeight)
-            .background(Color.white)
+            .background(Color(.systemBackground))
             
             Spacer()
         }
-        .foregroundColor(.black)
-        .background(Color.white)
+        .background(Color(.systemBackground))
     }
 }

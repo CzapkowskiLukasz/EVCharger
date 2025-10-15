@@ -26,6 +26,8 @@ final class MainViewModel: ObservableObject {
     
     @Published var selectedEvCharger: EVCharger?
     @Published var isSheetShown: Bool = false
+    @Published var shearchActive: Bool = false
+    @Published var searchText: String = ""
     
     var manageMapChange: Bool = false
     var manageCameraFollow: Bool = true
@@ -120,21 +122,12 @@ final class MainViewModel: ObservableObject {
     func loadChargers(userLocation: CLLocationCoordinate2D?) {
         guard let userLocation = userLocation else { return }
         
-        Task {
-            do {
-                chargers = try await service.fetchChargers(
-                    lat: userLocation.latitude,
-                    lon: userLocation.longitude,
-                    distance: 20
-                )
-            } catch {
-                // self.error = error.localizedDescription
-            }
-        }
+        fetchChargers(lat: userLocation.latitude, lon: userLocation.longitude)
     }
     
     func selectCharger(charger: EVCharger) {
         withAnimation {
+            shearchActive = false
             selectedEvCharger = charger
             region = .region(
                 MKCoordinateRegion(
@@ -142,6 +135,21 @@ final class MainViewModel: ObservableObject {
                     span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)
                 )
             )
+        }
+        isSheetShown = true
+    }
+    
+    func selectCity(city: City) {
+        withAnimation {
+            shearchActive = false
+            region = .region(
+                MKCoordinateRegion(
+                    center: .init(latitude: city.latitude, longitude: city.longitude),
+                    span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                )
+            )
+            
+            fetchChargers(lat: city.latitude, lon: city.longitude)
         }
         isSheetShown = true
     }
@@ -158,6 +166,20 @@ final class MainViewModel: ObservableObject {
                     )
                 )
             )
+        }
+    }
+    
+    private func fetchChargers(lat: Double, lon: Double) {
+        Task {
+            do {
+                chargers = try await service.fetchChargers(
+                    lat: lat,
+                    lon: lon,
+                    distance: 20
+                )
+            } catch {
+                print(error)
+            }
         }
     }
 }

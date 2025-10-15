@@ -21,6 +21,7 @@ struct ChargerAnnotationView: View {
                     .fill(Color.yellow.opacity(0.3))
                     .frame(width: 45, height: 45)
                     .scaleEffect(isSelected && pulse ? 1.3 : 1.0)
+                    .blur(radius: isSelected ? 15 : 0)
                     .opacity(isSelected ? 1 : 0)
                     .animation(
                         isSelected
@@ -46,35 +47,4 @@ struct ChargerAnnotationView: View {
                     }
             }
         }
-//    var body: some View {
-//        
-//            ZStack {
-//                if isSelected {
-//                    Circle()
-//                        .fill(Color.yellow.opacity(0.3))
-//                        .frame(width: 45, height: 45)
-//                        .scaleEffect(pulse ? 1.3 : 1.0)
-//                        .onAppear {
-//                            withAnimation(
-//                                .easeInOut(duration: 1.2)
-//                                .repeatForever(autoreverses: true)
-//                            ) {
-//                                pulse.toggle()
-//                            }
-//                        }
-//                }
-//                
-//                Image(systemName: "bolt.circle.fill")
-//                    .font(.title)
-//                    .foregroundColor(isSelected ? .yellow : .green)
-////                    .shadow(color: isSelected ? .yellow.opacity(0.8) : .clear,
-////                            radius: isSelected ? 10 : 0)
-//                    .onTapGesture {
-//                        withAnimation(.spring()) {
-//                            action(charger)
-//                        }
-//                    }
-//            }
-//            .border(.red)
-//    }
 }

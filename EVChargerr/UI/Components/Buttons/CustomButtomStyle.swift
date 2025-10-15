@@ -18,11 +18,11 @@ enum EVButtonType {
         case .primary:
             Color.black
         case .outline:
-            Color.white
+            Color(.systemBackground)
         case .navigation:
             Color.blue
         case .capsule:
-            Color.white
+            Color(.systemBackground)
         }
     }
 
@@ -31,7 +31,7 @@ enum EVButtonType {
         case .primary, .outline:
             Color.black
         case .navigation, .capsule:
-            Color.white
+            Color(.systemBackground)
         }
     }
 }
