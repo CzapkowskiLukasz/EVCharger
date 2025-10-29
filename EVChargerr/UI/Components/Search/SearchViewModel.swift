@@ -11,9 +11,9 @@ import Combine
 
 class SearchViewModel: ObservableObject {
     @Published var cities: [City] = []
-    
     @Published var search: String = ""
-    let service = GeolocationService()
+    
+    @Service var service: GeolocationServiceProtocol
     
     private var cancellables = Set<AnyCancellable>()
     

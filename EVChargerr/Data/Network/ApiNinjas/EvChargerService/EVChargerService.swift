@@ -7,13 +7,7 @@
 
 import Foundation
 
-class EVChargerService: APIService {
-    var apiKey: String
-    
-    init() {
-        self.apiKey = ProcessInfo.processInfo.environment["API_KEY"] ?? ""
-    }
-    
+class EVChargerService: EVChargerServiceProtocol {
 
     func fetchChargers(
         lat: Double,

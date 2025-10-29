@@ -7,12 +7,15 @@
 
 import Foundation
 
-class CountryService: APIService {
+class CountryService: CountryServiceProtocol {
+    
+    var base: String = "https://restcountries.com/v3.1/alpha/"
+    
     func fetchFlags(
         countryCode: String
     ) async throws -> [Country] {
         
-        return try await fetch(endpoint: "https://restcountries.com/v3.1/alpha/\(countryCode)")
+        return try await fetch(endpoint: base + countryCode)
         
     }
 }

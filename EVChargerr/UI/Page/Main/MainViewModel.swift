@@ -35,7 +35,7 @@ final class MainViewModel: ObservableObject {
     private var lastCenterCoordinate: CLLocationCoordinate2D?
     private var lastLoadLocation: CLLocationCoordinate2D?
     private let loadDistanceThreshold: Double = 500
-    private let service = EVChargerService()
+    @Service var service: EVChargerServiceProtocol
     let locationManager = LocationManager()
     
     private var cancellables = Set<AnyCancellable>()

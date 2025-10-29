@@ -19,9 +19,9 @@ protocol APIService {
 
 extension APIService {
     
-    var base: String {  "https://api.api-ninjas.com/v1/" }
     var apiKey: String { "" }
     
+    @MainActor
     func fetch<T: Decodable>(
         endpoint: String,
         queryItems: [URLQueryItem] = []

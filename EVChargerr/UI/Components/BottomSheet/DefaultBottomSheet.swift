@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct DefaultBottomSheet<Content: View>: View {
-    var content: Content
     
+    @State var drawerState: DrawerState = .collapsed
     @State private var offsetY: CGFloat = 0
     @State private var drawerHeight: CGFloat = 120
     @State private var startingOffset: CGFloat = UIScreen.main.bounds.height * 0.8
     @State private var currentOffset: CGFloat = 0
     @State private var endOffset: CGFloat = 0
     
-    @State var drawerState: DrawerState = .collapsed
+    var content: Content
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -70,6 +70,13 @@ struct DefaultBottomSheet<Content: View>: View {
                 }
         )
         .edgesIgnoringSafeArea(.bottom)
+        .onAppear {
+            if drawerState == .expanded {
+                withAnimation (.spring()) {
+                    endOffset = -DrawerState.expanded.drawerHeight
+                }
+            }
+        }
     }
 }
 
@@ -77,6 +84,7 @@ struct DefaultBottomSheet<Content: View>: View {
 struct BottomSheetModifier<SubView: View>: ViewModifier {
     @Binding var isShown: Bool
     
+    var state: DrawerState = .collapsed
     var subView: SubView
     
     func body(content: Content) -> some View {
@@ -89,7 +97,7 @@ struct BottomSheetModifier<SubView: View>: ViewModifier {
                 }
             
             if isShown {
-                DefaultBottomSheet(content: subView)
+                DefaultBottomSheet(drawerState: state, content: subView)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .animation(.spring(), value: isShown)
             }
@@ -109,10 +117,11 @@ extension View {
         )
     }
     
-    func searchSheet(isShown: Binding<Bool>, action: @escaping (City) -> Void) -> some View {
+    func searchSheet(isShown: Binding<Bool>, state: DrawerState = .collapsed, action: @escaping (City) -> Void) -> some View {
         self.modifier(
             BottomSheetModifier(
                 isShown: isShown,
+                state: state,
                 subView: SearchView(viewModel: .init(), action: action)
             )
         )

@@ -8,7 +8,7 @@
 import Foundation
 
 class CityViewModel: ObservableObject {
-    private let service = CountryService()
+    @Service var service: CountryServiceProtocol
     
     var city: City
     @Published var flagUrl: String?

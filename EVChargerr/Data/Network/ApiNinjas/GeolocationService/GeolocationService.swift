@@ -7,13 +7,7 @@
 
 import Foundation
 
-class GeolocationService: APIService {
-    var apiKey: String
-    
-    init() {
-        self.apiKey = ProcessInfo.processInfo.environment["API_KEY"] ?? ""
-    }
-    
+class GeolocationService: GeolocationServiceProtocol {
 
     func fetchCities(
         city: String

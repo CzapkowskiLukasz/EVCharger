@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B24BF60A2EB271B60004DFAA /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = B24BF6092EB271B60004DFAA /* Swinject */; };
 		B2B149892EA011DB00C97BA3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B2B149882EA011DB00C97BA3 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B24BF5E42EB271240004DFAA /* EVChargerr.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = EVChargerr.xcodeproj; sourceTree = "<group>"; };
 		B2B147DA2E9996FD00C97BA3 /* EVChargerr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EVChargerr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B147E72E9996FF00C97BA3 /* EVChargerrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVChargerrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B147F12E9996FF00C97BA3 /* EVChargerrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVChargerrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2B149892EA011DB00C97BA3 /* Kingfisher in Frameworks */,
+				B24BF60A2EB271B60004DFAA /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +81,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B24BF5E62EB271240004DFAA /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B2B147D12E9996FD00C97BA3 = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +132,7 @@
 			name = EVChargerr;
 			packageProductDependencies = (
 				B2B149882EA011DB00C97BA3 /* Kingfisher */,
+				B24BF6092EB271B60004DFAA /* Swinject */,
 			);
 			productName = EVChargerr;
 			productReference = B2B147DA2E9996FD00C97BA3 /* EVChargerr.app */;
@@ -212,11 +221,16 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				B2B149872EA0119D00C97BA3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				B24BF6082EB271B60004DFAA /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B2B147DB2E9996FD00C97BA3 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = B24BF5E62EB271240004DFAA /* Products */;
+					ProjectRef = B24BF5E42EB271240004DFAA /* EVChargerr.xcodeproj */;
+				},
 				{
 					ProductGroup = B2B148752E9AA32200C97BA3 /* Products */;
 					ProjectRef = B2B148732E9AA32200C97BA3 /* EVChargerr.xcodeproj */;
@@ -586,6 +600,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B24BF6082EB271B60004DFAA /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.0;
+			};
+		};
 		B2B149872EA0119D00C97BA3 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -597,6 +619,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B24BF6092EB271B60004DFAA /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B24BF6082EB271B60004DFAA /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
 		B2B149882EA011DB00C97BA3 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B2B149872EA0119D00C97BA3 /* XCRemoteSwiftPackageReference "Kingfisher" */;

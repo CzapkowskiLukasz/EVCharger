@@ -74,7 +74,8 @@ struct MainView: View {
             charger: viewModel.selectedEvCharger
         )
         .searchSheet(
-            isShown: $viewModel.shearchActive
+            isShown: $viewModel.shearchActive,
+            state: .expanded
         ) {
             city in
             viewModel.selectCity(city: city)
